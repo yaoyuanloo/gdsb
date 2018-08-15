@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fortunes.javamg.modules.gtxt.gt.dao.GtYwinfoDao">
+    
+	<sql id="gtYwinfoColumns">
+		a.id AS "id",
+		a.ywlsh AS "ywlsh",
+		a.hzhjs AS "hzhjs",
+		a.hzdh AS "hzdh",
+		a.ywid AS "ywid",
+		a.ywbh AS "ywbh",
+		a.ywmc AS "ywmc",
+		a.grsbh AS "grsbh",
+		a.sfzh AS "sfzh",
+		a.dnh AS "dnh",
+		a.xm AS "xm",
+		a.dwbh AS "dwbh",
+		a.dwmc AS "dwmc",
+		a.smjbh AS "smjbh",
+		a.slr AS "slr.id",
+		SLR.name AS "slr.name",
+		a.fqbh AS "fqbh",
+		a.lczt AS "lczt",
+		a.cjdate AS "cjdate",
+		a.fpzt AS "fpzt.value",
+		fpzt.label AS "fpzt.label",
+		a.sbfs AS "sbfs.value",
+		sbfs.label AS "sbfs.label",
+		a.slqy AS "slqy",
+		a.yzdh AS "yzdh",
+		a.blgzr AS "blgzr",
+		a.shr AS "shry.id",
+		shry.name AS "shry.name",
+		a.fpr AS "fpr.id",
+		FPR.name AS "FPR.name",
+		a.gnj AS "gnj",
+		a.by1 AS "by1",
+		a.by2 AS "by2",
+		a.by3 AS "by3",
+		a.by4 AS "by4",
+		a.by5 AS "by5",
+		a.by6 AS "by6",
+		a.by7 AS "by7",
+	    a.slhzh as "slhzh",
+		a.by8 AS "by8",
+		a.issynergy AS "synergy",
+		a.del_flag
+	</sql>
+
+	<sql id="gtYwinfoJoins">
+		LEFT JOIN SYS_DICT SBFS on SBFS.VALUE = a.sbfs AND SBFS."TYPE" = 'sb_type'
+		LEFT JOIN SYS_DICT FPZT on FPZT.VALUE = a.fpzt AND FPZT."TYPE" = 'yw_fpzt'
+		LEFT JOIN SYS_USER SLR on SLR."ID" = a.slr
+	    LEFT JOIN SYS_USER shry on shry."ID" = a.shr
+	    LEFT JOIN SYS_USER FPR on FPR."ID" = a.fpr
+	</sql>
+
+	<select id="get" resultType="GtYwinfo">
+		SELECT
+			<include refid="gtYwinfoColumns"/>
+		FROM gt_ywinfo a
+		<include refid="gtYwinfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findListYwinfo" resultType="GtYwinfo">
+		SELECT
+		<include refid="gtYwinfoColumns"/>
+		FROM gt_ywinfo a
+		<include refid="gtYwinfoJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="shry != null  and shry.id != null and shry.id!='' ">
+			and a.shr = #{shry.id}
+		</if>
+
+		<if test="fpzt != null and fpzt.value != null and fpzt.value != ''">
+			and a.fpzt = #{fpzt.value}
+		</if>
+
+		${sqlMap.dsf}
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findList" resultType="GtYwinfo">
+		SELECT
+		<include refid="gtYwinfoColumns"/>
+		FROM gt_ywinfo a
+		<include refid="gtYwinfoJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="slr != null  and slr.id != null and slr.id != ''">
+			and a.slr = #{slr.id}
+		</if>
+		<if test="shry != null  and shry.id != null and shry.id!='' ">
+			and a.shr = #{shry.id}
+		</if>
+		<if test="fpr != null and fpr.id != null and fpr.id != ''">
+			and a.fpr = #{fpr.id}
+		</if>
+		<if test="fpzt != null and fpzt.value != null and fpzt.value != ''">
+			and a.fpzt = #{fpzt.value}
+		</if>
+        <if test="lczt != null and lczt != ''">
+            and a.lczt = #{lczt}
+        </if>
+		${sqlMap.dsf}
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	<select id="getByYwlsh" resultType="GtYwinfo">
+		SELECT
+			<include refid="gtYwinfoColumns"/>
+		FROM gt_ywinfo a
+		<include refid="gtYwinfoJoins"/>
+		WHERE a.ywlsh = #{ywlsh}
+	</select>
+
+	<select id="findByHzdh" resultType="GtYwinfo">
+		SELECT
+			<include refid="gtYwinfoColumns"/>
+		FROM gt_ywinfo a
+		<include refid="gtYwinfoJoins"/>
+		WHERE a.hzdh = #{hzdh}
+	</select>
+
+	<select id="findywinfoPre" resultType="GtYwinfo">
+
+		select * from (select 	a.id AS "id",
+		a.ywlsh AS "ywlsh"  from  GT_YWINFO A WHERE
+		   a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="shry != null  and shry.id != null and shry.id!='' ">
+			and a.shr = #{shry.id}
+		</if>
+		<if test="fpzt != null and fpzt.value != null and fpzt.value != ''">
+			and a.fpzt = #{fpzt.value}
+		</if>
+		)where rownum=1
+	</select>
+	<select id="findywinfo" resultType="GtYwinfo">
+		SELECT
+			<include refid="gtYwinfoColumns"/>
+		FROM gt_ywinfo a
+		where a.ywlsh=#{ywlsh}
+	</select>
+
+
+	
+
+	<!-- <select id="findList" resultType="GtYwinfo">
+		SELECT
+		<include refid="gtYwinfoColumns"/>
+		FROM gt_ywinfo a
+		<include refid="gtYwinfoJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+   -->
+	<select id="findAllList" resultType="GtYwinfo">
+		SELECT
+			<include refid="gtYwinfoColumns"/>
+		FROM gt_ywinfo a
+		<include refid="gtYwinfoJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="slr != ''">
+			and a.slr=#{slr.id}
+		</if>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO gt_ywinfo(
+			id,
+			ywlsh,
+			hzhjs,
+			hzdh,
+			ywid,
+			ywbh,
+			ywmc,
+			grsbh,
+			sfzh,
+			dnh,
+			xm,
+			dwbh,
+			dwmc,
+			smjbh,
+			slr,
+			fqbh,
+			lczt,
+			cjdate,
+			sbfs,
+			slqy,
+			yzdh,
+			blgzr,
+			shr,
+			fpr,
+			gnj,
+			by1,
+			by2,
+			by3,
+			by4,
+			by5,
+			by6,
+			by7,
+			by8,
+			issynergy,
+			fpzt
+		) VALUES (
+			#{id},
+			#{ywlsh},
+			#{hzhjs},
+			#{hzdh},
+			#{ywid},
+			#{ywbh},
+			#{ywmc},
+			#{grsbh},
+			#{sfzh},
+			#{dnh},
+			#{xm},
+			#{dwbh},
+			#{dwmc},
+			#{smjbh},
+			#{slr.id},
+			#{fqbh},
+			#{lczt},
+			#{cjdate},
+			#{sbfs.value},
+			#{slqy},
+			#{yzdh},
+			#{blgzr},
+			#{shry.id},
+			#{fpr.id},
+			#{gnj},
+			#{by1},
+			#{by2},
+			#{by3},
+			#{by4},
+			#{by5},
+			#{by6},
+			#{by7},
+			#{by8},
+			#{synergy},
+			#{fpzt.value}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE gt_ywinfo
+		<trim prefix="set" suffixOverrides=",">
+			<if test="ywlsh!=null and ywlsh!=''">ywlsh = #{ywlsh},</if>
+			<if test="hzhjs!=null and hzhjs!=''">hzhjs = #{hzhjs},</if>
+			<if test="hzdh!=null and hzdh!=''">hzdh = #{hzdh},</if>
+			<if test="ywid!=null and ywid!=''">ywid = #{ywid},</if>
+			<if test="ywbh!=null and ywbh!=''">ywbh = #{ywbh},</if>
+			<if test="ywmc!=null and ywmc!=''">ywmc = #{ywmc},</if>
+			<if test="grsbh!=null and grsbh!=''">grsbh = #{grsbh},</if>
+			<if test="sfzh!=null and sfzh!=''">sfzh = #{sfzh},</if>
+			<if test="dnh!=null and dnh!=''">dnh = #{dnh},</if>
+			<if test="xm!=null and xm!=''">xm = #{xm},</if>
+			<if test="dwbh!=null and dwbh!=''">dwbh = #{dwbh},</if>
+			<if test="dwmc!=null and dwmc!=''">dwmc = #{dwmc},</if>
+			<if test="smjbh!=null and smjbh!=''">smjbh = #{smjbh},</if>
+			<if test="slr!=null and slr!='' and slr.id!=null and slr.id!=''">slr = #{slr.id},</if>
+			<if test="fqbh!=null and fqbh!=''">fqbh = #{fqbh},</if>
+			<if test="lczt!=null and lczt!=''">lczt = #{lczt},</if>
+			<if test="cjdate!=null and cjdate!=''">cjdate = #{cjdate},</if>
+			<if test="sbfs!=null and sbfs!='' and sbfs.value!=null and sbfs.value!=''">sbfs = #{sbfs.value},</if>
+			<if test="slqy!=null and slqy!=''">slqy = #{slqy},</if>
+			<if test="yzdh!=null and yzdh!=''">yzdh = #{yzdh},</if>
+			<if test="blgzr!=null and blgzr!=''">blgzr = #{blgzr},</if>
+			<if test="shry!=null and shry!='' and shry.id!=null and shry.id!=''">shr = #{shry.id},</if>
+			<if test="fpr!=null and fpr!='' and fpr.id!=null and fpr.id!=''">fpr = #{fpr.id},</if>
+			<if test="gnj!=null and gnj!=''">gnj = #{gnj},</if>
+			<if test="by1!=null and by1!=''">by1 = #{by1},</if>
+			<if test="by2!=null and by2!=''">by2 = #{by2},</if>
+			<if test="by3!=null and by3!=''">by3 = #{by3},</if>
+			<if test="by4!=null and by4!=''">by4 = #{by4},</if>
+			<if test="fpzt!=null and fpzt!='' and fpzt.value!=null and fpzt.value!='' ">fpzt = #{fpzt.value},</if>
+			<if test="by5!=null and by5!=''">by5 = #{by5},</if>
+			<if test="by6!=null and by6!=''">by6 = #{by6},</if>
+			<if test="by7!=null and by7!=''">by7 = #{by7},</if>
+			<if test="by8!=null and by8!=''">by8 = #{by8},</if>
+			<if test="synergy!=null and synergy!=''">issynergy = #{synergy},</if>
+
+		</trim>
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateLcztByYwlsh">
+		UPDATE gt_ywinfo SET
+			lczt = #{lczt}
+		WHERE ywlsh = #{ywlsh}
+	</update>
+
+	<update id="updateLcztByHzdh">
+		UPDATE gt_ywinfo SET
+			lczt = #{lczt}
+		WHERE hzdh = #{hzdh}
+	</update>
+
+	<update id="updateFpztByHzdh">
+		UPDATE gt_ywinfo SET
+			fpzt = #{fpzt.value}
+		WHERE hzdh = #{hzdh}
+	</update>
+
+	<update id="updateSynergyByYwidHzdh">
+		UPDATE gt_ywinfo SET
+			issynergy = #{synergy}
+		WHERE ywid = #{ywid}
+		AND HZDH = #{hzdh}
+	</update>
+
+	<update id="updateCjdateByYwlsh">
+		UPDATE gt_ywinfo SET
+			cjdate = #{cjdate}
+		WHERE ywlsh = #{ywlsh}
+	</update>
+
+	<update id="delete">
+		DELETE FROM gt_ywinfo
+		WHERE id = #{id}
+	</update>
+	<!--根据用户角色和业务状态查找该用户可以看到的业务-->
+	<!--查找用户所授权的业务-->
+	<select id="findYwInfoByUserId" parameterType="map"  resultType="GtYwinfo">
+		select
+		Distinct(A.id) as "id",
+		a.ywlsh AS "ywlsh",
+		a.hzhjs AS "hzhjs",
+		a.hzdh AS "hzdh",
+		a.ywid AS "ywid",
+		a.ywbh AS "ywbh",
+		a.ywmc AS "ywmc",
+		a.grsbh AS "grsbh",
+		a.sfzh AS "sfzh",
+		a.dnh AS "dnh",
+		a.xm AS "xm",
+		a.dwbh AS "dwbh",
+		a.dwmc AS "dwmc",
+		a.smjbh AS "smjbh",
+		a.slr AS "slr.id",
+		a.fqbh AS "fqbh",
+		a.lczt AS "lczt",
+		a.cjdate AS "cjdate",
+		a.sbfs AS "sbfs.value",
+		a.slqy AS "slqy",
+		a.yzdh AS "yzdh",
+		a.blgzr AS "blgzr",
+		a.shr AS "shry.id",
+		shry.name AS "shry.name",
+		a.fpr AS "fpr.id",
+		FPR.name AS "FPR.name",
+		a.gnj AS "gnj",
+		a.by1 AS "by1",
+		a.by2 AS "by2",
+		a.by3 AS "by3",
+		a.by4 AS "by4",
+		a.by5 AS "by5",
+		a.by6 AS "by6",
+		a.by7 AS "by7",
+		a.by8 AS "by8",
+		a.issynergy AS "synergy"
+		from  GT_YWINFO A  inner join  d_ywinfo B ON  A.YWID= B.ID  INNER JOIN gt_slrole_djyw C ON  B.ID=C.YWID INNER JOIN gt_user_slrole D ON C.ROLEID=D.ROLEID
+		<include refid="gtYwinfoJoins"/>
+		  WHERE a.del_flag ='0'
+		<if test="userId != '' and userId!=null">
+			and D.USERID=#{userId}
+		</if>
+		<if test="fpzt != '' and fpzt!=null">
+			and a.fpzt=#{fpzt}
+		</if>
+		<if test="lczt != '' and lczt!=null">
+			and a.lczt=#{lczt}
+		</if>
+		<if test="lczts != '' and lczts!=null">
+			or a.lczt=#{lczts}
+		</if>
+
+	</select>
+	
+	
+	<select id="queryhzdh" resultType="GtYwinfo">
+		select 
+		g.ywlsh,
+		g.ywmc
+		from gt_ywinfo g 
+		where g.hzdh=#{hzdh}
+	</select>
+</mapper>

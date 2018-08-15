@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fortunes.javamg.modules.gtxt.gt.dao.GtSmjinfoDao">
+    
+	<sql id="gtSmjinfoColumns">
+		a.id AS "id",
+		a.ywlsh AS "ywlsh",
+		a.smjmc AS "smjmc",
+		a.smjpath AS "smjpath",
+		a.smjhjs AS "smjhjs",
+		a.type AS "type",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.state AS "state",
+		a.material AS "material"
+	</sql>
+	
+	<sql id="gtSmjinfoJoins">
+	</sql>
+    
+	<select id="get" resultType="GtSmjinfo">
+		SELECT 
+			<include refid="gtSmjinfoColumns"/>
+		FROM gt_smjinfo a
+		<include refid="gtSmjinfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	
+	<select id="queryLsh" resultType="GtSmjinfo">
+		SELECT 
+			<include refid="gtSmjinfoColumns"/>
+		FROM gt_smjinfo a
+		<include refid="gtSmjinfoJoins"/>
+		WHERE a.YWLSH = #{YWLSH}
+	</select>
+	
+	<select id="findList" resultType="GtSmjinfo">
+		SELECT 
+			<include refid="gtSmjinfoColumns"/>
+		FROM gt_smjinfo a
+		<include refid="gtSmjinfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GtSmjinfo">
+		SELECT 
+			<include refid="gtSmjinfoColumns"/>
+		FROM gt_smjinfo a
+		<include refid="gtSmjinfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gt_smjinfo(
+			id,
+			ywlsh,
+			smjmc,
+			smjpath,
+			smjhjs,
+			type,
+			create_date,
+			create_by,
+			update_date,
+			remarks,
+			del_flag,
+			state,
+			material
+		) VALUES (
+			#{id},
+			#{ywlsh},
+			#{smjmc},
+			#{smjpath},
+			#{smjhjs},
+			#{type},
+			#{createDate},
+			#{createBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{state},
+			#{material}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gt_smjinfo SET 	
+			ywlsh = #{ywlsh},
+			smjmc = #{smjmc},
+			smjpath = #{smjpath},
+			smjhjs = #{smjhjs},
+			type = #{type},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			state = #{state}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE gt_smjinfo SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="countSmj" resultType="int">
+        select count(1) from gt_smjinfo
+		where ywlsh=#{ywlsh}
+		and material=#{material}
+    </select>
+    
+    
+   <!--  <select id="" resultType="GtSmjinfo">
+        select <include refid="gtSmjinfoColumns"/>
+         from gt_smjinfo
+		where ywlsh=#{ywlsh}
+		and material=#{material}
+    </select> -->
+    
+    
+    <select id="getMaterialid" resultType="GtSmjinfo">
+		SELECT 
+			<include refid="gtSmjinfoColumns"/>
+		FROM gt_smjinfo a
+		<include refid="gtSmjinfoJoins"/>
+		WHERE a.YWLSH = #{ywlsh}
+		AND a.MATERIAL = #{material}
+	</select>
+    
+    <select id="queryMateriainfoid" resultType="GtSmjinfo">
+		select g.id,
+		g.ywlsh AS "ywlsh",
+		g.smjpath AS "smjpath",
+		g.type AS "type",
+		g.material AS "material",
+		p.name AS "smjmc"
+		from  gt_smjinfo g
+    	inner join p_materialinfo p on p.id=g.material
+		WHERE g.ywlsh = #{ywlsh}
+		
+	</select>
+    
+    
+    <update id="updateId">
+		UPDATE gt_smjinfo SET 	
+		type = #{type},
+		smjpath = #{smjpath}
+		where ywlsh=#{ywlsh}
+		and material=#{material}
+	</update>
+	
+	
+</mapper>

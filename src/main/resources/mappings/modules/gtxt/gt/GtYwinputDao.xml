@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fortunes.javamg.modules.gtxt.gt.dao.GtYwinputDao">
+    
+	<sql id="gtYwinputColumns">
+		a.id AS "id",
+		a.ywlsh AS "ywlsh",
+		a.lrzt AS "lrzt.value",
+		a.jsoninfo AS "jsoninfo",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.state AS "state",
+		a.lczt AS "lczt"
+	</sql>
+	
+	<sql id="gtYwinputJoins">
+	</sql>
+    
+	<select id="get" resultType="GtYwinput">
+		SELECT 
+			<include refid="gtYwinputColumns"/>
+		FROM gt_ywinput a
+		<include refid="gtYwinputJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findByYwlsh" resultType="GtYwinput">
+		SELECT
+			<include refid="gtYwinputColumns"/>
+		FROM gt_ywinput a
+		<include refid="gtYwinputJoins"/>
+		WHERE a.ywlsh = #{ywlsh}
+	</select>
+
+	<select id="getByYwlshLczt" resultType="GtYwinput">
+		SELECT
+			<include refid="gtYwinputColumns"/>
+		FROM gt_ywinput a
+		<include refid="gtYwinputJoins"/>
+		WHERE a.ywlsh = #{ywlsh}
+		AND a.lczt = #{lczt}
+	</select>
+	
+	<select id="findList" resultType="GtYwinput">
+		SELECT 
+			<include refid="gtYwinputColumns"/>
+		FROM gt_ywinput a
+		<include refid="gtYwinputJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GtYwinput">
+		SELECT 
+			<include refid="gtYwinputColumns"/>
+		FROM gt_ywinput a
+		<include refid="gtYwinputJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gt_ywinput(
+			id,
+			ywlsh,
+			lrzt,
+			jsoninfo,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			state,
+			lczt
+		) VALUES (
+			#{id},
+			#{ywlsh},
+			#{lrzt.value},
+			#{jsoninfo},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{state},
+			#{lczt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gt_ywinput SET 	
+			ywlsh = #{ywlsh},
+			lrzt = #{lrzt.value},
+			jsoninfo = #{jsoninfo},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			state = #{state},
+			lczt = #{lczt}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE gt_ywinput SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

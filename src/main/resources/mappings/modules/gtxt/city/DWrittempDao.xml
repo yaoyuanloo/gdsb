@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fortunes.javamg.modules.gtxt.city.dao.DWrittempDao">
+
+	<sql id="dWrittempColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.code AS "code",
+		a.zone AS "zone",
+		a.conment AS "conment",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.state AS "state"
+	</sql>
+
+	<sql id="dWrittempJoins">
+	</sql>
+
+	<select id="get" resultType="DWrittemp">
+		SELECT
+		<include refid="dWrittempColumns"/>
+		FROM d_writtemp a
+		<include refid="dWrittempJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="DWrittemp">
+		SELECT
+		<include refid="dWrittempColumns"/>
+		FROM d_writtemp a
+		<include refid="dWrittempJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="DWrittemp">
+		SELECT
+		<include refid="dWrittempColumns"/>
+		FROM d_writtemp a
+		<include refid="dWrittempJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO d_writtemp(
+		id,
+		name,
+		code,
+		zone,
+		conment,
+		create_by,
+		create_date,
+		update_by,
+		update_date,
+		remarks,
+		del_flag,
+		state
+		) VALUES (
+		#{id},
+		#{name},
+		#{code},
+		#{zone},
+		#{conment},
+		#{createBy.id},
+		#{createDate},
+		#{updateBy.id},
+		#{updateDate},
+		#{remarks},
+		#{delFlag},
+		#{state}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE d_writtemp SET
+		name = #{name},
+		code = #{code},
+		zone = #{zone},
+		conment = #{conment},
+		update_by = #{updateBy.id},
+		update_date = #{updateDate},
+		remarks = #{remarks},
+		state = #{state}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE d_writtemp SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+</mapper>

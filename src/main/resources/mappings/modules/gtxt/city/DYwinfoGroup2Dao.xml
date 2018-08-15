@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fortunes.javamg.modules.gtxt.city.dao.DYwinfoGroup2Dao">
+    
+	<sql id="dYwinfoGroup2Columns">
+		a.id AS "id",
+		a.yw_id AS "ywId",
+		a.conment AS "conment",
+		a.day AS "day",
+		a.orgid AS "orgid",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.state AS "state"
+	</sql>
+	
+	<sql id="dYwinfoGroup2Joins">
+	</sql>
+    
+	<select id="get" resultType="DYwinfoGroup2">
+		SELECT 
+			<include refid="dYwinfoGroup2Columns"/>
+		FROM d_ywinfo_group2 a
+		<include refid="dYwinfoGroup2Joins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="DYwinfoGroup2">
+		SELECT 
+			<include refid="dYwinfoGroup2Columns"/>
+		FROM d_ywinfo_group2 a
+		<include refid="dYwinfoGroup2Joins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DYwinfoGroup2">
+		SELECT 
+			<include refid="dYwinfoGroup2Columns"/>
+		FROM d_ywinfo_group2 a
+		<include refid="dYwinfoGroup2Joins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO d_ywinfo_group2(
+			id,
+			yw_id,
+			conment,
+			day,
+			orgid,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			state
+		) VALUES (
+			#{id},
+			#{ywId},
+			#{conment},
+			#{day},
+			#{orgid},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{state}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE d_ywinfo_group2 SET 	
+			yw_id = #{ywId},
+			conment = #{conment},
+			day = #{day},
+			orgid = #{orgid},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			state = #{state}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE d_ywinfo_group2 SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<!--<select id="getModePare" resultType="DYwinfoGroup2">
+        SELECT
+        <include refid="targetsColumns"/>
+        FROM targets a
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="jZbdm != null and jZbdm != ''">
+                AND a.j_zbdm = #{jZbdm}
+            </if>
+            <if test="jZbmc != null and jZbmc != ''">
+                AND a.j_zbmc LIKE
+                <if test="dbName == 'oracle'">'%'||#{jZbmc}||'%'</if>
+                <if test="dbName == 'mssql'">'%'+#{jZbmc}+'%'</if>
+                <if test="dbName == 'mysql'">concat('%',#{jZbmc},'%')</if>
+            </if>
+            <if test="jDmbh != null and jDmbh != ''">
+                AND a.j_dmbh = #{jDmbh}
+            </if>
+            <if test="jDmmc != null and jDmmc != ''">
+                AND a.j_dmmc LIKE
+                <if test="dbName == 'oracle'">'%'||#{jDmmc}||'%'</if>
+                <if test="dbName == 'mssql'">'%'+#{jDmmc}+'%'</if>
+                <if test="dbName == 'mysql'">concat('%',#{jDmmc},'%')</if>
+            </if>
+            <if test="jDmnr != null and jDmnr != ''">
+                AND a.j_dmnr = #{jDmnr}
+            </if>
+        </where>
+    </select> -->
+</mapper>

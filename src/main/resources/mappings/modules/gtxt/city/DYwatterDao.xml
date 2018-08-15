@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fortunes.javamg.modules.gtxt.city.dao.DYwatterDao">
+    
+	<sql id="dYwatterColumns">
+		a.id AS "id",
+		a.ywid AS "ywid",
+		a.isjds AS "isjds",
+		a.issjhz AS "issjhz",
+		a.isbqcl AS "isbqcl",
+		a.isbb AS "isbb",
+		a.sl_tempid AS "slTempid",
+		a.bb_tempid AS "bbTempid",
+		a.sj_tempid AS "sjTempid",
+		a.bq_tempid AS "bqTempid",
+		a.flowcode AS "flowcode.value",
+		flow.LABEL AS "flowcode.label",
+		a.lzfscode AS "lzfscode.value",
+		lcfs.LABEL AS "lzfscode.label",
+		a.shjbcode AS "shjbcode.value",
+		shjb.LABEL AS "shjbcode.label",
+		a.del_flag AS "delFlag",
+		a.state AS "state"
+	</sql>
+	
+	<sql id="dYwatterJoins">
+		LEFT JOIN SYS_DICT flow ON a.flowcode = flow."VALUE" AND flow.TYPE = 'yw_zlfcs'
+		LEFT JOIN SYS_DICT shjb ON a.shjbcode = shjb."VALUE" AND shjb.TYPE = 'ywshfs'
+		LEFT JOIN SYS_DICT lcfs ON a.lzfscode = lcfs."VALUE" AND lcfs.TYPE = 'ywlzfs'
+	</sql>
+    
+	<select id="get" resultType="DYwatter">
+		SELECT 
+			<include refid="dYwatterColumns"/>
+		FROM d_ywatter a
+		<include refid="dYwatterJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByYwId" resultType="DYwatter">
+		SELECT
+			<include refid="dYwatterColumns"/>
+		FROM d_ywatter a
+		<include refid="dYwatterJoins"/>
+		WHERE a.del_flag = 0
+		AND a.ywid = #{ywid}
+	</select>
+	
+	<select id="findList" resultType="DYwatter">
+		SELECT 
+			<include refid="dYwatterColumns"/>
+		FROM d_ywatter a
+		<include refid="dYwatterJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DYwatter">
+		SELECT 
+			<include refid="dYwatterColumns"/>
+		FROM d_ywatter a
+		<include refid="dYwatterJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO d_ywatter(
+			id,
+			ywid,
+			isjds,
+			issjhz,
+			isbqcl,
+			isbb,
+			sl_tempid,
+			bb_tempid,
+			sj_tempid,
+			bq_tempid,
+			flowcode,
+			lzfscode,
+			fpfscode,
+			shjbcode,
+			del_flag,
+			state
+		) VALUES (
+			#{id},
+			#{ywid},
+			#{isjds},
+			#{issjhz},
+			#{isbqcl},
+			#{isbb},
+			#{slTempid},
+			#{bbTempid},
+			#{sjTempid},
+			#{bqTempid},
+			#{flowcode.id},
+			#{lzfscode.id},
+			#{fpfscode},
+			#{shjbcode.id},
+			#{delFlag},
+			#{state}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE d_ywatter
+		<trim prefix="set" suffixOverrides=",">
+		<if test="ywid!=null and ywid!=''">ywid = #{ywid},</if>
+		<if test="isjds!=null and isjds!=''">	isjds = #{isjds},</if>
+		<if test="issjhz!=null and issjhz!=''">	issjhz = #{issjhz},</if>
+		<if test="isbqcl!=null and isbqcl!=''">	isbqcl = #{isbqcl},</if>
+		<if test="isbb!=null and isbb!=''">	isbb = #{isbb},</if>
+		<if test="slTempid!=null and slTempid!=''">sl_tempid = #{slTempid},</if>
+		<if test="bbTempid!=null and bbTempid!=''">	bb_tempid = #{bbTempid},</if>
+		<if test="sjTempid!=null and sjTempid!=''">sj_tempid = #{sjTempid},</if>
+		<if test="bqTempid!=null and bqTempid!=''">	bq_tempid = #{bqTempid},</if>
+		<if test="flowcode!=null and flowcode.id!=null and flowcode.id!=''">	flowcode = #{flowcode.id},</if>
+		<if test="lzfscode!=null and lzfscode.id!=null and lzfscode.id!=''">	lzfscode = #{lzfscode.id},</if>
+		<if test="fpfscode!=null and fpfscode.id!=null and fpfscode.id!=''">	fpfscode = #{fpfscode},</if>
+		<if test="shjbcode!=null and shjbcode.id!=null and shjbcode.id!=''">	shjbcode = #{shjbcode.id},</if>
+		<if test="state!=null">	state = #{state},</if>
+		</trim>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE d_ywatter SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	
+</mapper>

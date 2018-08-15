@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fortunes.javamg.modules.gtxt.city.dao.GtUserSlroleDao">
+    
+	<sql id="gtUserSlroleColumns">
+		a.id AS "id",
+		a.roleid AS "roleid",
+		a.userid AS "userid"
+	</sql>
+	
+	<sql id="gtUserSlroleJoins">
+	</sql>
+	<select id="getUserIdByRoleId" resultType="GtUserSlrole">
+		SELECT
+		<include refid="gtUserSlroleColumns"/>
+		FROM gt_user_slrole a
+		<include refid="gtUserSlroleJoins"/>
+		WHERE a.userid = #{userid}
+	</select>
+	<select id="get" resultType="GtUserSlrole">
+		SELECT 
+			<include refid="gtUserSlroleColumns"/>
+		FROM gt_user_slrole a
+		<include refid="gtUserSlroleJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GtUserSlrole">
+		SELECT 
+			<include refid="gtUserSlroleColumns"/>
+		FROM gt_user_slrole a
+		<include refid="gtUserSlroleJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GtUserSlrole">
+		SELECT 
+			<include refid="gtUserSlroleColumns"/>
+		FROM gt_user_slrole a
+		<include refid="gtUserSlroleJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gt_user_slrole(
+			id,
+			roleid,
+			userid
+		) VALUES (
+			#{id},
+			#{roleid},
+			#{userid}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gt_user_slrole SET 	
+			roleid = #{roleid},
+			userid = #{userid}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM gt_user_slrole
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

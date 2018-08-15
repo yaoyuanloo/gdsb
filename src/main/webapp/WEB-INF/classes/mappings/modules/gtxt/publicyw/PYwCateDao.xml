@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fortunes.javamg.modules.gtxt.publicyw.dao.PYwCateDao">
+
+	<sql id="pYwCateColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.code AS "code",
+		a.conment AS "conment",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.state AS "state",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.yw_type AS "ywType"
+	</sql>
+	
+	<sql id="pYwCateJoins">
+	</sql>
+    
+	<select id="get" resultType="PYwCate">
+		SELECT 
+			<include refid="pYwCateColumns"/>
+		FROM p_yw_cate a
+		<include refid="pYwCateJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="PYwCate">
+		SELECT 
+			<include refid="pYwCateColumns"/>
+		FROM p_yw_cate a
+		<include refid="pYwCateJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PYwCate">
+		SELECT 
+			<include refid="pYwCateColumns"/>
+		FROM p_yw_cate a
+		<include refid="pYwCateJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO p_yw_cate(
+			id,
+			name,
+			code,
+			conment,
+			create_by,
+			create_date,
+			update_by,
+			state,
+			update_date,
+			remarks,
+			del_flag,
+			yw_type
+		) VALUES (
+			#{id},
+			#{name},
+			#{code},
+			#{conment},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{state},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{ywType}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE p_yw_cate SET 	
+			name = #{name},
+			code = #{code},
+			conment = #{conment},
+			update_by = #{updateBy.id},
+			state = #{state},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			yw_type = #{ywType}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE p_yw_cate SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

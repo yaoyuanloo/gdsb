@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fortunes.javamg.modules.gtxt.publicyw.dao.PMaterialinfoDao">
+    
+	<sql id="pMaterialinfoColumns">
+		a.id AS "id",
+		a.cate_id AS "cateId",
+		a.name AS "name",
+		a.code AS "code",
+		a.conment AS "conment",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.state AS "state"
+	</sql>
+	
+	<sql id="pMaterialinfoJoins">
+	</sql>
+    
+	<select id="get" resultType="PMaterialinfo">
+		SELECT 
+			<include refid="pMaterialinfoColumns"/>
+		FROM p_materialinfo a
+		<include refid="pMaterialinfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="PMaterialinfo">
+		SELECT 
+			<include refid="pMaterialinfoColumns"/>
+		FROM p_materialinfo a
+		<include refid="pMaterialinfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="cateId != null and cateId != ''">
+				AND a.cate_id =#{cateId}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="queryInfo" resultType="PMaterialinfo">
+		SELECT
+			p.name AS "name",
+			p.cate_id AS "cateId",
+			p.id as "id",
+			p.code as "code"
+		FROM p_materialinfo p
+		INNER JOIN d_yw_material d ON d.p_mate_id=p.id
+		WHERE d.yw_id=#{ywId}
+	</select>
+	
+	
+	<select id="queryid" resultType="PMaterialinfo">
+		SELECT
+			p.name AS "name",
+			p.cate_id AS "cateId",
+			p.id as "id",
+			p.code as "code"
+		FROM p_materialinfo p
+		INNER JOIN d_yw_material d ON d.p_mate_id=p.id
+		WHERE d.yw_id=#{ywId}
+	</select>
+	
+	<select id="qConditionCl" resultType="PMaterialinfo">
+		SELECT
+			p.name AS "name",
+			p.cate_id AS "cateId",
+			p.id as "id",
+			p.code as "code"
+		FROM p_materialinfo p
+		INNER JOIN d_condition_material d ON d.p_mate_id=p.id
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	<select id="findAllList" resultType="PMaterialinfo">
+		SELECT 
+			<include refid="pMaterialinfoColumns"/>
+		FROM p_materialinfo a
+		<include refid="pMaterialinfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO p_materialinfo(
+			id,
+			cate_id,
+			name,
+			code,
+			conment,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			state
+		) VALUES (
+			#{id},
+			#{cateId},
+			#{name},
+			#{code},
+			#{conment},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{state}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE p_materialinfo SET 	
+			cate_id = #{cateId},
+			name = #{name},
+			code = #{code},
+			conment = #{conment},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			state = #{state}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE p_materialinfo SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<select id="queryXl" resultType="PMaterialinfo">
+		  select  m.name AS "name",min(m.id) AS "id" from p_materialinfo m where m.id in(
+         select f.p_mate_id from  d_yw_material f where f.yw_id in(
+                 select g.ywid from gt_ywinfo g
+                 where g.hzdh=#{hzdh}
+         )
+     ) group by m.name
+	</select>
+	
+</mapper>

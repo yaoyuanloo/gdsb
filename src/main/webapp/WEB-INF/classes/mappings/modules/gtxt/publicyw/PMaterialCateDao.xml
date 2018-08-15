@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fortunes.javamg.modules.gtxt.publicyw.dao.PMaterialCateDao">
+    
+	<sql id="pMaterialCateColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.code AS "code",
+		a.conment AS "conment",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.state AS "state",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.yw_type AS "ywType"
+	</sql>
+	
+	<sql id="pMaterialCateJoins">
+	</sql>
+    
+	<select id="get" resultType="PMaterialCate">
+		SELECT 
+			<include refid="pMaterialCateColumns"/>
+		FROM p_material_cate a
+		<include refid="pMaterialCateJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	
+	
+	<select id="findAll" resultType="PMaterialCate">
+		SELECT 
+			<include refid="pMaterialCateColumns"/>
+		FROM p_material_cate a
+	</select>
+	
+	
+	<select id="findList" resultType="PMaterialCate">
+		SELECT 
+			<include refid="pMaterialCateColumns"/>
+		FROM p_material_cate a
+		<include refid="pMaterialCateJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	
+	
+	<select id="findAllList" resultType="PMaterialCate">
+		SELECT 
+			<include refid="pMaterialCateColumns"/>
+		FROM p_material_cate a
+		<include refid="pMaterialCateJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	
+	
+	
+	<insert id="insert">
+		INSERT INTO p_material_cate(
+			id,
+			name,
+			code,
+			conment,
+			create_by,
+			create_date,
+			state,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			yw_type
+		) VALUES (
+			#{id},
+			#{name},
+			#{code},
+			#{conment},
+			#{createBy.id},
+			#{createDate},
+			#{state},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{ywType}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE p_material_cate SET 	
+			name = #{name},
+			code = #{code},
+			conment = #{conment},
+			state = #{state},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			yw_type = #{ywType}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE p_material_cate SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

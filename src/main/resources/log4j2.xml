@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- status=debug 可以查看log4j的装配过程 -->
+<configuration status="off" monitorInterval="1800">
+    <properties>
+        <property name="LOG_HOME">/log/gtxtLogs</property>
+        <!-- 日志备份目录 -->
+        <property name="BACKUP_HOME">{LOG_HOME}/backup</property>
+        <property name="STAT_NAME">stat</property>
+        <property name="SERVER_NAME">global</property>
+    </properties>
+    <appenders>
+        <!-- 定义控制台输出 -->
+        <!--<Console name="Console" target="SYSTEM_OUT" follow="true">-->
+        <Console name="Console" target="SYSTEM_OUT"  >
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss} %level[%file:%line] - %msg%n"/>
+        </Console>
+        <!--<NoSql name="DatabaseAppender">
+            &lt;!&ndash;<MongoDb databaseName="gtdb" collectionName="syslogs" server="192.168.200.156" port="27017" username="gtdbs" password="gtdbs"/>&ndash;&gt;
+            <MongoDb databaseName="gtdb" collectionName="syslogs" server="19.16.100.104" port="27017" username="gtdbs" password="gtdbs"/>
+            <Filters>
+                <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </NoSql>-->
+    </appenders>
+    <loggers>
+        <logger name="com.fortunes" level="DEBUG">
+        </logger>
+        <logger name="com.fortunes.common.security.shiro" level="WARN">
+        </logger>
+        <logger name="com.fortunes.common.utils.JedisUtils" level="WARN">
+        </logger>
+        <logger name="com.fortunes.framework.sys.web.LoginController" level="WARN">
+        </logger>
+        <logger name="com.fortunes.modules.oa.dao.OaNotifyDao.findCount" level="WARN">
+        </logger>
+        <root level="DEBUG">
+            <!--<appender-ref ref="DatabaseAppender"/>-->
+            <appender-ref ref="Console"/>
+        </root>
+    </loggers>
+</configuration>

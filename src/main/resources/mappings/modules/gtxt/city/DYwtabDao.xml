@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fortunes.javamg.modules.gtxt.city.dao.DYwtabDao">
+    
+	<sql id="gtdywtabcolumns">
+		a.YWID AS "ywid",
+		a.QUERYTAGID AS "querytagid.value",
+		query.LABEL AS "querytagid.label"
+	</sql>
+	
+	<sql id="gtUserSlroleJoins">
+		LEFT JOIN SYS_DICT query ON query.VALUE = a.QUERYTAGID AND query.TYPE = 'yw_tag'
+	</sql>
+	<insert id="insert">
+		INSERT INTO D_YW_TAB(
+			YWID,
+			QUERYTAGID
+		) VALUES (
+			#{ywid},
+			#{querytagid.value}
+		)
+	</insert>
+	<select id="findList" resultType="DYwtab">
+		SELECT
+		<include refid="gtdywtabcolumns"/>
+		FROM D_YW_TAB a
+		<include refid="gtUserSlroleJoins"/>
+		<where>
+            A.YWID=#{ywid}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findYwtabByYwId" resultType="DYwtab">
+		SELECT
+			<include refid="gtdywtabcolumns"/>
+		FROM
+			D_YW_TAB a
+		<include refid="gtUserSlroleJoins"/>
+		WHERE a.ywid = #{ywid}
+	</select>
+
+	<update id="update">
+		UPDATE d_yw_tab SET 	
+			ywid = #{ywid},
+			querytagid= #{querytagid.value},
+		WHERE ywid = #{ywid}
+	</update>
+
+	<update id="deleteTabByDiYwId">
+		delete  from d_yw_tab
+		 where ywid= #{ywid}
+	</update>
+</mapper>

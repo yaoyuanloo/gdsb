@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fortunes.javamg.modules.gtxt.gt.dao.GtSmjcbDao">
+    
+	<sql id="gtSmjcbColumns">
+		a.id AS "id",
+		a.smjid AS "smjid",
+		a.smjmc AS "smjmc",
+		a.smjpath AS "smjpath",
+		a.smjhjs AS "smjhjs",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.state AS "state"
+	</sql>
+	
+	<sql id="gtSmjcbJoins">
+	</sql>
+    
+	<select id="get" resultType="GtSmjcb">
+		SELECT 
+			<include refid="gtSmjcbColumns"/>
+		FROM gt_smjcb a
+		<include refid="gtSmjcbJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	
+	
+	<select id="getByJid" resultType="GtSmjcb">
+		SELECT 
+			<include refid="gtSmjcbColumns"/>
+		FROM gt_smjcb a
+		<include refid="gtSmjcbJoins"/>
+		WHERE a.smjid = #{smjid}
+	</select>
+	
+	<select id="findList" resultType="GtSmjcb">
+		SELECT 
+			<include refid="gtSmjcbColumns"/>
+		FROM gt_smjcb a
+		<include refid="gtSmjcbJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GtSmjcb">
+		SELECT 
+			<include refid="gtSmjcbColumns"/>
+		FROM gt_smjcb a
+		<include refid="gtSmjcbJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gt_smjcb(
+			id,
+			smjid,
+			smjmc,
+			smjpath,
+			smjhjs,
+			create_date,
+			create_by,
+			update_date,
+			remarks,
+			del_flag,
+			state
+		) VALUES (
+			#{id},
+			#{smjid},
+			#{smjmc},
+			#{smjpath},
+			#{smjhjs},
+			#{createDate},
+			#{createBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{state}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gt_smjcb SET 	
+			smjid = #{smjid},
+			smjmc = #{smjmc},
+			smjpath = #{smjpath},
+			smjhjs = #{smjhjs},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			state = #{state}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE gt_smjcb SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	
+	<!-- <delete id="deleteNumbers" parameterType="java.lang.String">
+		DELETE FROM gt_smjcb where id in
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete> -->
+	 <select id="queryMateriainfoName" resultType="GtSmjcb">
+		select t.id AS "id",
+		t.smjid AS "smjid",
+		t.smjmc AS "smjmc",
+		t.smjpath AS "smjpath",
+		g.ywlsh AS "smjhjs",
+		g.type  AS "remarks",
+		p.name AS "delFlag"
+	    from gt_smjcb t
+		inner join gt_smjinfo g on g.id=t.smjid
+		inner join p_materialinfo p on p.id=g.material
+		where t.smjid=#{smjid}
+	</select>
+	
+	
+	
+</mapper>

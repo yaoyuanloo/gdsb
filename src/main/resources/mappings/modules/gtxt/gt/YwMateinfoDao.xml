@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fortunes.javamg.modules.gtxt.gt.dao.YwMateinfoDao">
+    
+	<sql id="ywMateinfoColumns">
+		a.id AS "id",
+		a.ywlsh AS "ywlsh",
+		a.mateid AS "mateid"
+	</sql>
+	
+	<sql id="ywMateinfoJoins">
+	</sql>
+    
+	<select id="get" resultType="YwMateinfo">
+		SELECT 
+			<include refid="ywMateinfoColumns"/>
+		FROM yw_mateinfo a
+		<include refid="ywMateinfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="YwMateinfo">
+		SELECT 
+			<include refid="ywMateinfoColumns"/>
+		FROM yw_mateinfo a
+		<include refid="ywMateinfoJoins"/>
+		<where>
+			
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="ywlsh != null and ywlsh != ''">
+				AND a.ywlsh = #{ywlsh}
+			</if>
+			<if test="mateid != null and mateid != ''">
+				AND a.mateid = #{mateid}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="YwMateinfo">
+		SELECT 
+			<include refid="ywMateinfoColumns"/>
+		FROM yw_mateinfo a
+		<include refid="ywMateinfoJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO yw_mateinfo(
+			id,
+			ywlsh,
+			mateid
+		) VALUES (
+			#{id},
+			#{ywlsh},
+			#{mateid}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE yw_mateinfo SET 	
+			id = #{id},
+			ywlsh = #{ywlsh},
+			mateid = #{mateid}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM yw_mateinfo
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

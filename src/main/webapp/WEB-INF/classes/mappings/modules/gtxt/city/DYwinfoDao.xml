@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fortunes.javamg.modules.gtxt.city.dao.DYwinfoDao">
+    
+	<sql id="dYwinfoColumns">
+		a.id AS "id",
+		a.yw_id AS "pywinfo.id",
+		b.name AS  "pywinfo.name",
+		b.code AS  "pywinfo.code",
+		b.acceptaddress AS  "pywinfo.acceptaddress",
+		b.examineaddress AS  "pywinfo.examineaddress",
+		b.trialaddress AS  "pywinfo.trialaddress",
+		b.reviewaddress AS  "pywinfo.reviewaddress",
+		b.approveaddress AS  "pywinfo.approveaddress",
+		a.conment AS "conment",
+		a.day AS "day",
+		a.orgid AS "orgid",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.state AS "state"
+	</sql>
+	
+	<sql id="dYwinfoJoins">
+	INNER JOIN p_ywinfo b ON b.id = a.yw_id
+	INNER JOIN P_YW_CATE c ON c.id = b.CATE_ID
+	</sql>
+    
+	<select id="get" resultType="DYwinfo">
+		SELECT 
+			<include refid="dYwinfoColumns"/>
+		FROM d_ywinfo a
+		<include refid="dYwinfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getYwid" resultType="DYwinfo">
+		SELECT 
+			<include refid="dYwinfoColumns"/>
+		FROM d_ywinfo a
+		<include refid="dYwinfoJoins"/>
+		WHERE a.yw_id = #{yw_id}
+	</select>
+	
+	
+	
+	<select id="findList" resultType="DYwinfo">
+		SELECT 
+			<include refid="dYwinfoColumns"/>
+		FROM d_ywinfo a
+		<include refid="dYwinfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="pywinfo != null and pywinfo != '' and  pywinfo.id != null and pywinfo.id != ''">
+				AND a.yw_id =#{pywinfo.id}
+			</if>
+			<if test="orgid != null and orgid != '' ">
+				AND a.orgid =#{orgid}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DYwinfo">
+		SELECT 
+			<include refid="dYwinfoColumns"/>
+		FROM d_ywinfo a
+		<include refid="dYwinfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="orgid != null and orgid != '' ">
+				AND a.orgid =#{orgid}
+			</if>
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO d_ywinfo(
+			id,
+			yw_id,
+
+			conment,
+			day,
+			orgid,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			state
+		) VALUES (
+			#{id},
+			#{pywinfo.id},
+			#{conment},
+			#{day},
+			#{orgid},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{state}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE d_ywinfo SET 	
+			yw_id = #{pywinfo.id},
+			conment = #{conment},
+			day = #{day},
+			orgid = #{orgid},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			state = #{state}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<update id="updateywid">
+		UPDATE d_ywinfo SET 	
+			conment = #{conment},
+			day = #{day},
+			orgid = #{orgid},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			state = #{state}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE d_ywinfo SET 
+			del_flag = #{DEL_FLAG_DE9LETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	
+	
+	
+	<select id="findChecksYwList" resultType="DYwinfo">
+		Select A.Id As pid,A.Name As pname,c.Id as id,B.Name as name From P_Yw_Cate  A Inner Join P_Ywinfo  B On A.Id=B.Cate_Id Inner  Join D_Ywinfo C  On B.Id=C.Yw_Id Where C.ORGID='Z100'
+	</select>
+	<!--查找用户所授权的业务-->
+	<select id="findUserYwMenu" parameterType="String"  resultType="DYwinfo">
+		Select Distinct(c.id) as id,a.name as name,b.name as pname,b.id as pid ,a.acceptaddress as conment  From P_Ywinfo A  Inner Join  P_Yw_Cate B On A.Cate_Id=B.Id Inner Join  D_Ywinfo C   On A.Id=C.Yw_Id   Inner Join  Gt_Slrole_Djyw  D On  C.id=D.Ywid  inner JOIN   GT_USER_SLROLE  E ON D.ROLEID=E.ROLEID  where E.USERID=#{userId}
+	</select>
+
+
+</mapper>

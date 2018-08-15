@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fortunes.javamg.modules.gtxt.gt.dao.GtYwinfocbDao">
+    
+	<sql id="gtYwinfocbColumns">
+		a.id AS "id",
+		a.ywlsh AS "ywlsh",
+		a.ywlc AS "ywlc",
+		a.cljg AS "cljg",
+		a.clyj AS "clyj",
+		a.clr AS "clr.id",
+		CLR.NAME AS "clr.name"
+	</sql>
+	
+	<sql id="gtYwinfocbJoins">
+		LEFT JOIN SYS_USER CLR on CLR."ID" = a.clr
+	</sql>
+    
+	<select id="get" resultType="GtYwinfocb">
+		SELECT 
+			<include refid="gtYwinfocbColumns"/>
+		FROM gt_ywinfocb a
+		<include refid="gtYwinfocbJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GtYwinfocb">
+		SELECT 
+			<include refid="gtYwinfocbColumns"/>
+		FROM gt_ywinfocb a
+		<include refid="gtYwinfocbJoins"/>
+		<where>
+			<if test="ywlsh != null and ywlsh != ''">
+				and a.YWLSH =#{ywlsh}
+					</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GtYwinfocb">
+		SELECT 
+			<include refid="gtYwinfocbColumns"/>
+		FROM gt_ywinfocb a
+		<include refid="gtYwinfocbJoins"/>
+		<where>
+			a.YWLSH = #{YWLSH}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gt_ywinfocb(
+			id,
+			ywlsh,
+			ywlc,
+			cljg,
+			clyj,
+			clr
+		) VALUES (
+			#{id},
+			#{ywlsh},
+			#{ywlc},
+			#{cljg},
+			#{clyj},
+			#{clr.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gt_ywinfocb SET 	
+			ywlsh = #{ywlsh},
+			ywlc = #{ywlc},
+			cljg = #{cljg},
+			clyj = #{clyj},
+			clr = #{clr.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM gt_ywinfocb
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

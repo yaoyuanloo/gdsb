@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fortunes.javamg.modules.gtxt.city.dao.DConditionMaterialDao">
+    
+	<sql id="dConditionMaterialColumns">
+		a.d_con_id AS "dConId",
+		a.p_mate_id AS "pMateId"
+	</sql>
+	
+	<sql id="dConditionMaterialJoins">
+	</sql>
+    
+	<select id="get" resultType="DConditionMaterial">
+		SELECT 
+			<include refid="dConditionMaterialColumns"/>
+		FROM d_condition_material a
+		<include refid="dConditionMaterialJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="DConditionMaterial">
+		SELECT 
+			<include refid="dConditionMaterialColumns"/>
+		FROM d_condition_material a
+		<include refid="dConditionMaterialJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DConditionMaterial">
+		SELECT 
+			<include refid="dConditionMaterialColumns"/>
+		FROM d_condition_material a
+		<include refid="dConditionMaterialJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO d_condition_material(
+			d_con_id,
+			p_mate_id
+		) VALUES (
+			#{dConId},
+			#{pMateId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE d_condition_material SET 	
+			d_con_id = #{dConId},
+			p_mate_id = #{pMateId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM d_condition_material
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deletetj">
+		DELETE FROM d_condition_material
+    	WHERE d_con_id = #{dconid}
+	</update>
+	
+	
+	
+	
+	
+</mapper>

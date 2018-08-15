@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fortunes.javamg.modules.gtxt.city.dao.DYwfzrDao">
+    
+	<sql id="dYwFzrColumns">
+		a.ywid AS "ywid",
+		a.userid AS "userid"
+	</sql>
+	
+	<sql id="dYwFzrJoins">
+	</sql>
+    
+	<select id="get" resultType="DYwFzr">
+		SELECT 
+			<include refid="dYwFzrColumns"/>
+		FROM d_yw_fzr a
+		<include refid="dYwFzrJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="DYwFzr">
+		SELECT 
+			<include refid="dYwFzrColumns"/>
+		FROM d_yw_fzr a
+		<include refid="dYwFzrJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DYwFzr">
+		SELECT 
+			<include refid="dYwFzrColumns"/>
+		FROM d_yw_fzr a
+		<include refid="dYwFzrJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO d_yw_fzr(
+			ywid,
+			userid
+		) VALUES (
+			#{ywId},
+			#{userid}
+		)  
+	</insert>
+	
+	<update id="update">
+		UPDATE d_yw_fzr SET 	
+			ywid = #{ywId},
+			userid = #{userid}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM d_yw_fzr
+		WHERE id = #{id}
+	</update>
+	<update id="deleteByYwId">
+		DELETE FROM d_yw_fzr
+		WHERE ywid = #{ywId}
+	</update>
+</mapper>

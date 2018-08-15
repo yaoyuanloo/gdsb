@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fortunes.javamg.modules.gtxt.city.dao.DYwConditionDao">
+    
+	<sql id="dYwConditionColumns">
+		a.id AS "id",
+		a.yw_id AS "ywId",
+		a.p_con_id AS "pConId"
+	</sql>
+	
+	<sql id="dYwConditionJoins">
+	</sql>
+    
+	<select id="get" resultType="DYwCondition">
+		SELECT 
+			<include refid="dYwConditionColumns"/>
+		FROM d_yw_condition a
+		<include refid="dYwConditionJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="DYwCondition">
+		SELECT 
+			<include refid="dYwConditionColumns"/>
+		FROM d_yw_condition a
+		<include refid="dYwConditionJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DYwCondition">
+		SELECT 
+			<include refid="dYwConditionColumns"/>
+		FROM d_yw_condition a
+		<include refid="dYwConditionJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO d_yw_condition(
+			id,
+			yw_id,
+			p_con_id
+		) VALUES (
+			#{id},
+			#{ywId},
+			#{pConId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE d_yw_condition SET 	
+			yw_id = #{ywId},
+			p_con_id = #{pConId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM d_yw_condition
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteYwid">
+		delete d_yw_condition d where d.yw_id=#{ywid}
+	</update>
+	
+</mapper>

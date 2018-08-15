@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://code.alibabatech.com/schema/dubbo
+       http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+    <!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
+    <dubbo:application name="fd_gtxt"/>
+
+    <!-- 使用zookeeper广播注册中心暴露发现服务地址 -->
+    <!--dubbo:registry 标签一些属性的说明：
+      1）register是否向此注册中心注册服务，默认为true，如果设为false，将只订阅，不注册。
+      2）check注册中心不存在时，是否报错，默认为true。
+      3）subscribe是否向此注册中心订阅服务，默认为true，如果设为false，将只注册，不订阅。
+      4）timeout注册中心请求超时时间(毫秒)，默认5000。
+      5）address可以Zookeeper集群配置，地址可以多个以逗号隔开等。
+      dubbo支持zkclient和curator两种Zookeeper客户端实现
+                缺省配置：
+      <dubbo:registry ... client="zkclient" />
+                 如果需要改为curator实现，请配置：  
+      <dubbo:registry ... client="curator" /> 
+      zookeeper集群配置：
+      <dubbo:registry address="zookeeper://192.168.2.11:2181?backup=192.168.2.12:2181,192.168.2.13:2181" />
+     -->
+
+    <dubbo:protocol name="dubbo" serialization="kryo"/>
+
+
+    <!--<dubbo:registry address="zookeeper://192.168.200.2:2184/" client="curator" check="false"/>-->
+    <dubbo:registry address="zookeeper://19.16.100.100:2184/" client="curator" check="false"/>
+    <!--<dubbo:registry address="zookeeper://10.9.4.72:2181/" client="curator" check="false" />-->
+    <!-- <dubbo:registry protocol="zookeeper" address="192.168.200.2:2184" client="curator"/> -->
+
+
+    <!-- 生成远程服务代理，可以和本地bean一样使用-->
+    <!--dubbo:reference 的一些属性的说明：
+     1）interface调用的服务接口
+     2）check 启动时检查提供者是否存在，true报错，false忽略
+     3）registry 从指定注册中心注册获取服务列表，在多个注册中心时使用，值为<dubbo:registry>的id属性，多个注册中心ID用逗号分隔
+     4）loadbalance 负载均衡策略，可选值：random,roundrobin,leastactive，分别表示：随机，轮循，最少活跃调用-->
+
+    <!-- 银海 统一存储接口 -->
+    <dubbo:reference id="dubboUcmService" interface="com.yinhai.dubbo.ucm.service.DubboUcmService"  check="false" />
+
+    <!-- 万达 特殊工种登记 接口 -->
+    <!--<dubbo:reference id="dubboVS" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r1.f14020102.F14020102Service" check="false"/>-->
+
+    <!-- 万达  -->
+    <!--<dubbo:reference id="F14020105Service" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r1.f14020105.vs.F14020105Service" group="NYN" version="1.0" check="false"/>-->
+
+    <!-- 东软 人员信息查询 -->
+    <dubbo:reference id="PersonDubboService" interface="com.neusoft.sl.si.basicinfo.dubbo.employee.person.service.PersonDubboService" check="false"/>
+
+    <!-- 东软 居民信息维护 -->
+    <dubbo:reference id="ResidentManageDubboService" interface="com.neusoft.sl.si.basicinfo.dubbo.resident.person.service.ResidentManageDubboService" group="sj" check="false"/>
+
+    <!-- <dubbo:reference id="historyApprovedService" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r1.f14020103.vs.F14020103Service" group="NYN" version="1.3" check="false"/>-->
+
+    <!--东软 居民家庭登记 接口 -->
+    <!--<dubbo:reference id="familyDubbo" interface="com.neusoft.sl.si.basicinfo.bpo.employee.familydubbo.FamilyDubbo"  check="false" />-->
+
+    <!--易联众 调用 接口 -->
+    <!--  <dubbo:reference id="preAccept" interface="com.ylzinfo.gad.dubbo.service.PreAccept" check="false"/>
+     <dubbo:reference id="messagePush" interface="com.ylzinfo.gad.dubbo.service.MessagePush" check="false"/> -->
+
+    <!--易联众 暴露 接口 -->
+    <!--   <dubbo:service ref="busiService" interface="com.fortunes.gtxt.dubbo.ylz.BusiService"/>
+      <bean id="busiService" class="com.fortunes.javamg.modules.dubbo.ylz.BusiServiceImpl"></bean> -->
+
+    <!--易联众 暴露 接口 -->
+    <!-- <dubbo:service ref="busiService" interface="com.fortunes.gtxt.dubbo.ylz.BusiService"/>
+     <bean id="busiService" class="com.fortunes.javamg.modules.dubbo.ylz.BusiServiceImpl"></bean>-->
+
+    <!--创智 异地就医申请登记 接口 -->
+    <!--<dubbo:reference id="outInterface" interface="com.neusoft.dubbo.interfaces.OutInterface" check="false"/>-->
+
+
+    <!--<dubbo:reference id="personnelArchives" interface="com.insigma.dubbo.api.PersonnelArchiveService" check="false"/>-->
+
+
+    <!--易联众 接口 -->
+    <!--<dubbo:service ref="busiService" interface="com.fortunes.gtxt.dubbo.ylz.BusiService"/>-->
+    <!--<bean id="busiService" class="com.fortunes.javamg.modules.dubbo.ylz.BusiServiceImpl"></bean>-->
+
+    <!--<dubbo:service ref="busiInfoService" interface="com.fortunes.gtxt.dubbo.fd.BusiInfoService"/>-->
+    <!--<bean id="busiInfoService" class="com.fortunes.javamg.modules.dubbo.busiinfo.BusiInfoServiceImpl"></bean>-->
+
+</beans>

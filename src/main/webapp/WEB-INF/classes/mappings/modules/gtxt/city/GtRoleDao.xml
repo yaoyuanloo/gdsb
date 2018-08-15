@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fortunes.javamg.modules.gtxt.city.dao.GtRoleDao">
+    
+	<sql id="gtRoleColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.conment AS "conment",
+		a.code AS "code",
+		a.zone AS "zone",
+		a.role_type AS "roleType",
+		a.state AS "state"
+	</sql>
+	
+	<sql id="gtRoleJoins">
+	</sql>
+    
+	<select id="get" resultType="GtRole">
+		SELECT 
+			<include refid="gtRoleColumns"/>
+		FROM gt_role a
+		<include refid="gtRoleJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GtRole">
+		SELECT 
+			<include refid="gtRoleColumns"/>
+		FROM gt_role a
+		<include refid="gtRoleJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GtRole">
+		SELECT 
+			<include refid="gtRoleColumns"/>
+		FROM gt_role a
+		<include refid="gtRoleJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findroleList" resultType="GtRole">
+		SELECT 
+			<include refid="gtRoleColumns"/>
+		FROM gt_role a
+		<include refid="gtRoleJoins"/>
+		WHERE a.zone = #{zone} 
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gt_role(
+			id,
+			name,
+			conment,
+			code,
+			zone,
+			role_type,
+			state
+		) VALUES (
+			#{id},
+			#{name},
+			#{conment},
+			#{code},
+			#{zone},
+			#{roleType},
+			#{state}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gt_role SET 	
+			name = #{name},
+			conment = #{conment},
+			code = #{code},
+			zone = #{zone},
+			role_type = #{roleType},
+			state = #{state}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM gt_role
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

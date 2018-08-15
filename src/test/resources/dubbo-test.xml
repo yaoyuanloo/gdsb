@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://code.alibabatech.com/schema/dubbo
+       http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+    <!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
+    <dubbo:application name="fd_gtxt"/>
+    <dubbo:protocol name="dubbo" serialization="kryo"/>
+    <!--<dubbo:registry address="zookeeper://192.168.200.2:2184/" client="curator" check="false" timeout="300000"/>-->
+    <dubbo:registry address="zookeeper://19.16.100.100:2184/" client="curator" check="false" timeout="300000"/>
+
+    <!--<dubbo:reference id="outInterface" interface="com.neusoft.dubbo.interfaces.OutInterface" check="false"/>-->
+
+	<dubbo:consumer timeout="300000" />
+
+    <!-- 银海 统一存储接口 -->
+    <dubbo:reference id="dubboUcmService" interface="com.yinhai.dubbo.ucm.service.DubboUcmService"  check="false" />
+
+    <!--易联众 调用 接口 -->
+    <!--<dubbo:reference id="preAccept" interface="com.ylzinfo.gad.dubbo.service.PreAccept" check="false"/>-->
+    <!--<dubbo:reference id="messagePush" interface="com.ylzinfo.gad.dubbo.service.MessagePush" check="false"/>-->
+
+    <!-- 东软 单位核销信息查询 -->
+    <dubbo:reference id="queryDWQKHX" interface="com.neusoft.sl.si.collection.dubbo.employee.query.service.QueryDWHXXIDubboService"  check="false" />
+    <!-- 东软 码表查询 -->
+    <dubbo:reference id="queryAA10" interface="com.neusoft.sl.si.common.code.service.QueryAA10DubboService"  check="false" />
+    <!-- 东软 养老个人账户查询 -->
+    <dubbo:reference id="queryYLGR" interface="com.neusoft.sl.si.common.pensionpersonaccountinfo.service.QueryYLGRZHXXDubboService"  check="false" />
+    <!-- 东软 单位历史缴费查询 -->
+    <dubbo:reference id="queryPerson" interface="com.neusoft.sl.si.collection.dubbo.employee.query.service.QueryPersonPaymentInfoBPO"  check="false" />
+    <!-- 东软单位历史缴费查询 -->
+    <dubbo:reference id="queryUnit" interface="com.neusoft.sl.si.collection.dubbo.employee.query.service.QueryUnitPaymentInfoBPO"  check="false" />
+    <!--东软 居民家庭登记 接口 -->
+    <dubbo:reference id="familyDubbo" interface="com.neusoft.sl.si.basicinfo.bpo.employee.familydubbo.FamilyDubbo"  check="false" />
+     <!--东软 个人补退信息查询 接口 -->
+    <dubbo:reference id="queryGRBTX" interface="com.neusoft.sl.si.collection.dubbo.employee.query.service.QueryGRBTXIDubboService"  check="false" />
+     <!--东软 人员欠款核销信息查询 接口 -->
+    <dubbo:reference id="queryRYQKH" interface="com.neusoft.sl.si.collection.dubbo.employee.query.service.QueryRYQKHXXIDubboService"  check="false" />
+     <!--东软 跨省转入申请（联系函出具）、基本养老保险参保缴费凭证（跨省、城乡）、跨省临时账户联系函打印 接口 -->
+    <dubbo:reference id="savePensionContact" interface="com.neusoft.sl.si.settle.dubbo.pension.service.SavePensionContactNoteService"  check="false" />
+      <!--东软 基本养老保险参保缴费凭证（跨省、城乡）、跨省临时账户联系函打印 接口 -->
+    <dubbo:reference id="savePensionCertificate" interface="com.neusoft.sl.si.settle.dubbo.pension.service.SavePensionCertificateService"  check="false" />
+     <!--东软  跨省临时账户联系函打印 接口 -->
+
+    <dubbo:reference id="saveTempNote" interface="com.neusoft.sl.si.settle.dubbo.pension.service.SaveTempNoteService"  check="false" />
+
+      <!--东软  单位基本信息查询 接口 -->
+    <dubbo:reference id="unitQueryAB01Dubbo" interface="com.neusoft.sl.si.basicinfo.dubbo.employee.unit.service.UnitQueryAB01DubboService"  check="false" />
+
+
+
+
+
+
+
+
+    <!-- 万达 养老视同建账、历史档案信息审核 -->
+    <dubbo:reference id="F14020103Service1" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r1.f14020103.vs.F14020103Service" group="NYN" version="1.0" check="false"/>
+    <!-- 万达 打印退休证 -->
+    <!--<dubbo:reference id="printRetireService" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r1.f14020108.vs.F14020108Service" check="false"/>-->
+    <!-- 万达 养老信息变更 -->
+    <!--<dubbo:reference id="retireChangeInfo" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r2.f14020201.vs.F14020201VService" group="dxx" version="1.0" check="false"/>-->
+    <!-- 万达 领取失业金区间按月登记 -->
+
+    <!-- <dubbo:reference id="monthUnemployment" interface="com.wondersgroup.interfaceServiceVS.unemploymentVS.u2.f14030201.F14030201Service" group="wanda_ywd2" version="1.0" check="false"/>
+    万达 死亡终止一次性待遇
+    <dubbo:reference id="deathOnce" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r3.f14020301.F14020301ServiceVS" group="wanda_ywd2" version="1.0" check="false"/>
+    万达 直接纳入人员补登记
+    <dubbo:reference id="justAdd" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r1.f14020104.vs.F14020104Service" group="wanda_cr" version="1.0" check="false"/>
+    万达 重复缴费
+    <dubbo:reference id="repeatPay" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r3.f14020307.F14020307Service" group="f14020307" version="1.0" check="false"/>
+    万达 重复缴费清理
+    <dubbo:reference id="repeatPayClean" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r3.f14020306.F14020306Service" group="f14020307" version="1.0" check="false"/>
+    万达 失业待遇发放信息变更
+    <dubbo:reference id="pensionInfochange" interface="com.wondersgroup.interfaceServiceVS.unemploymentVS.u2.f14030208.F14030208ServiceVS" group="LQL" version="1.2" check="false"/> -->
+
+
+
+    <!-- <dubbo:reference id="monthUnemployment" interface="com.wondersgroup.interfaceServiceVS.unemploymentVS.u2.f14030201.F14030201Service" group="wanda_ywd2" version="1.0" check="false"/>
+    万达 死亡终止一次性待遇
+    <dubbo:reference id="deathOnce" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r3.f14020301.F14020301ServiceVS" group="wanda_ywd2" version="1.0" check="false"/>
+    万达 直接纳入人员补登记
+    <dubbo:reference id="justAdd" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r1.f14020104.vs.F14020104Service" group="wanda_cr" version="1.0" check="false"/>
+    万达 重复缴费
+    <dubbo:reference id="repeatPay" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r3.f14020307.F14020307Service" group="f14020307" version="1.0" check="false"/>
+    万达 重复缴费清理
+    <dubbo:reference id="repeatPayClean" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r3.f14020306.F14020306Service" group="f14020307" version="1.0" check="false"/>
+    万达 失业待遇发放信息变更
+    <dubbo:reference id="pensionInfochange" interface="com.wondersgroup.interfaceServiceVS.unemploymentVS.u2.f14030208.F14030208ServiceVS" group="LQL" version="1.2" check="false"/> -->
+
+
+	<!-- 万达 获取人员基本信息（东软） -->
+	<dubbo:reference id="f14020202ServiceVS" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r2.f14020202.F14020202ServiceVS" group="LQL" version="1.2" check="false"/>
+
+
+    <!--<dubbo:reference id="monthUnemployment" interface="com.wondersgroup.interfaceServiceVS.unemploymentVS.u2.f14030201.F14030201Service" group="wanda_ywd2" version="1.0" check="false"/>-->
+    <!-- 万达 直接纳入人员补登记 -->
+    <!--<dubbo:reference id="justAdd" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r1.f14020104.vs.F14020104Service" group="wanda_cr" version="1.0" check="false"/>-->
+    <!-- 万达 重复缴费 -->
+    <!--<dubbo:reference id="repeatPay" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r3.f14020307.F14020307Service" group="f14020307" version="1.0" check="false"/>-->
+    <!-- 万达 重复缴费清理 -->
+    <!--<dubbo:reference id="repeatPayClean" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r3.f14020306.F14020306Service" group="f14020306" version="2.0" check="false"/>-->
+    <!-- 万达 退个人账户存储额 -->
+    <!--<dubbo:reference id="returnMoney" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r3.f14020304.F14020304Service" group="f14020304" version="2.0" check="false"/>-->
+    <!-- 万达 失业期间死亡待遇核定 -->
+    <!--<dubbo:reference id="dealperiod" interface="com.wondersgroup.interfaceServiceVS.unemploymentVS.u1.f14030103.F14030103Service" group="f14030103" version="2.0" check="false"/>-->
+    <!-- 万达 领取资格认证报到(本市领取异地居住、本市居住异地领取) -->
+    <!--<dubbo:reference id="authentication" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r8.f14020216.F14020216Service" group="f14020216" version="2.0" check="false"/>-->
+
+	<!-- 万达 获取失业人员基本信息（东软） -->
+	<dubbo:reference id="f14030208ServiceVS" interface="com.wondersgroup.interfaceServiceVS.unemploymentVS.u2.f14030208.F14030208ServiceVS" group="L" version="1.2" check="false"/>
+
+	<!-- 万达 月定期养老待遇 -->
+	<dubbo:reference id="f14020105Service" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r1.f14020105.vs.F14020105Service" group="NYN" version="1.7" check="false"/>
+
+
+
+
+    <!-- *************万达 失业待遇发放信息变更 -->
+    <!-- *************<dubbo:reference id="pensionInfochange" interface="com.wondersgroup.interfaceServiceVS.unemploymentVS.u2.f14030208.F14030208ServiceVS" group="LQL" version="1.2" check="false"/>-->
+
+
+    <!-- ************************************************************** -->
+
+    <!-- 万达 失业定期待遇核定 -->
+    <!--<dubbo:reference id="unemploymentRegular" interface="com.wondersgroup.interfaceServiceVS.unemploymentVS.u1.f14030101.F14030101Service" group="lmfTest01" version="1.3" check="false"/>-->
+
+    <!-- 万达 离退休待遇停发 -->
+    <!--<dubbo:reference id="retireRegularTreatmentStop" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r2.f14020203.F14020203ServiceVS" group="lcg1" check="false"/>-->
+
+    <!-- 万达 离退休待遇续发 -->
+    <!--<dubbo:reference id="retireRegularTreatmentGoAhead" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r2.f14020204.F14020204ServiceVS" group="lcg2" check="false"/>-->
+
+    <!-- 万达 离退休待遇补发 -->
+    <!--<dubbo:reference id="retireRegularTreatmentRepair" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r2.f14020205.F14020205ServiceVS" group="lcg3" check="false"/>-->
+
+    <!-- 万达 离退休待遇扣发 -->
+    <!--<dubbo:reference id="retireRegularTreatmentDeduct" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r2.f14020206.F14020206ServiceVS" group="lcg4" check="false"/>-->
+
+    <!-- 万达 失业待遇停发 -->
+    <!--<dubbo:reference id="unemploymentRegularTreatmentStop" interface="com.wondersgroup.interfaceServiceVS.unemploymentVS.u2.f14030202.F14030202ServiceVS" group="lcg5" check="false"/>-->
+
+    <!-- 万达 失业待遇续发 -->
+    <!--<dubbo:reference id="unemploymentRegularTreatmentGoAhead" interface="com.wondersgroup.interfaceServiceVS.unemploymentVS.u2.f14030203.F14030203ServiceVS" group="lcg6" check="false"/>-->
+
+    <!-- 万达 失业待遇补发 -->
+    <!--<dubbo:reference id="unemploymentRegularTreatmentRepair" interface="com.wondersgroup.interfaceServiceVS.unemploymentVS.u2.f14030204.F14030204ServiceVS" group="lcg7" check="false"/>-->
+
+    <!-- 万达 失业待遇扣发 -->
+    <!--<dubbo:reference id="unemploymentRegularTreatmentDeduct" interface="com.wondersgroup.interfaceServiceVS.unemploymentVS.u2.f14030205.F14030205ServiceVS" group="lcg8" check="false"/>-->
+
+    <!-- 万达 稳定就业一次性待遇核定、 非本省一次性待遇核定、 自主创业后领取一次性失业金核定、 生育一次性加发失业金核定 -->
+    <!--<dubbo:reference id="wendingjiuyeyicixing" interface="com.wondersgroup.interfaceServiceVS.unemploymentVS.u1.f14030102.F14030102Service" group="lmfTest01" version="1.3" check="false"/>-->
+
+    <!-- 万达 失业定期待遇重核 -->
+    <!--<dubbo:reference id="retireRecheck" interface="com.wondersgroup.interfaceServiceVS.unemploymentVS.u1.f14030104.F14030104Service" group="lmfTest01" version="1.3" check="false"/>-->
+
+    <!-- 万达 离退休死亡终止一次性待遇、在职死亡终止一次性待遇 -->
+    <!--<dubbo:reference id="deathTreatment" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r3.f14020301.F14020301ServiceVS" group="lcg" check="false"/>-->
+
+    <!-- 万达 月定期养老待遇重算 -->
+    <!--<dubbo:reference id="monthRegularRetireReCalc" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r1.f14020106.vs.F14020106Service" group="NYN" version="1.2" check="false"/>-->
+
+
+
+
+    <!-- 万达 获取人员基本信息（东软） -->
+    <!--<dubbo:reference id="f14020202ServiceVS" interface="com.wondersgroup.interfaceServiceVS.retirementVS.r2.f14020202.F14020202ServiceVS" group="LQL" version="1.2" check="false"/>-->
+
+
+    <!--东软  跨省临时账户联系函打印 接口 -->
+    <!--<dubbo:reference id="saveSaveUrbanRural" interface="com.neusoft.sl.si.settle.dubbo.urbanrual.service.SaveUrbanRuralContactNoteDubboService"  check="false" />-->
+
+
+    <!--东软 粤人社发[2011]37号文趸缴 -->
+    <!--<dubbo:reference id="dubboOnceFeePension" interface="com.neusoft.sl.si.collection.dubbo.employee.oncefee.service.DubboOnceFeePensionBPO"  check="false" />-->
+
+
+    <!--东软 省内转入申请（联系函出具） -->
+    <!--<dubbo:reference id="saveProvPension" interface="com.neusoft.sl.si.settle.dubbo.pension.service.SaveProvPensionContactNoteDubboService"  check="false" />-->
+
+    <!--东软 医疗转入申请 -->
+    <!--<dubbo:reference id="saveMedSettleInfo" interface="com.neusoft.sl.si.settle.dubbo.medicare.service.SaveMedSettleInfoDubboService"  check="false" />-->
+    <!--东软 医疗缴费凭证打印 -->
+    <!--<dubbo:reference id="certificate" interface="com.neusoft.sl.si.settle.dubbo.medicare.service.SaveMedCertificateDubboService"  check="false" />-->
+
+    <!-- 东软 失业金代缴医疗保险信息查询 -->
+    <!--<dubbo:reference id="unemployFundWithhold" interface="com.neusoft.sl.si.collection.dubbo.employee.query.param.FeeInfoQueryParam" check="false"></dubbo:reference>-->
+
+    <!-- 东软 家庭登记 -->
+    <!--<dubbo:reference id="familyManageDubbo" interface="com.neusoft.sl.si.basicinfo.dubbo.employee.family.service.FamilyManageDubboService" check="false"></dubbo:reference>-->
+
+
+    <!-- 东软 省内参保缴费凭证 -->
+    <!--<dubbo:reference id="saveProvCertificate" interface="com.neusoft.sl.si.settle.dubbo.pension.service.SaveProvCertificateDubboService" check="false"></dubbo:reference>-->
+
+    <!-- 东软 社区登记-->
+    <!--<dubbo:reference id="communityManage" interface="com.neusoft.sl.si.basicinfo.dubbo.employee.community.service.CommunityManageDubboService" check="false"></dubbo:reference>-->
+
+    <!-- 东软 公共信息查询 -->
+    <!--<dubbo:reference id="personDubbo" interface="com.neusoft.sl.si.basicinfo.dubbo.employee.person.service.PersonDubboService" check="false"></dubbo:reference>-->
+
+
+    <!-- 东软 居民医疗 -->
+    <!--<dubbo:reference id="residentManage" interface="com.neusoft.sl.si.basicinfo.dubbo.resident.person.service.ResidentManageDubboService" group="sj" check="false"></dubbo:reference>-->
+    
+    <!-- 东软  人员缴费历史信息补录 -->
+    <!--<dubbo:reference id="feeHistoryMakeup" interface="com.neusoft.sl.si.collection.dubbo.employee.feehistory.service.FeeHistoryMakeupDubboService" check="false"></dubbo:reference>-->
+    <!-- 东软  人员一次性缴费信息查询 -->
+    <!--<dubbo:reference id="personOnceFeeInfo" interface="com.neusoft.sl.si.collection.dubbo.employee.query.service.PersonOnceFeeInfoQueryDubboService" check="false"></dubbo:reference>-->
+
+
+    <!-- 东软  人员一次性缴费信息查询 -->
+    <!--<dubbo:reference id="saveUnemployCerti" interface="com.neusoft.sl.si.settle.dubbo.unemploy.service.SaveUnemployCertificateDubboService" check="false"></dubbo:reference>-->
+
+
+    <!-- 东软  人员一次性缴费信息查询 -->
+    <!--<dubbo:reference id="saveUnemployNote" interface="com.neusoft.sl.si.settle.dubbo.unemploy.service.SaveUnemployNoteDubboService" check="false"></dubbo:reference>-->
+
+
+    <!-- 东软  关系转入\转出查询(公共接口，ac06,条件：电脑号,变更类型) -->
+    <!--<dubbo:reference id="getSettleInfoItem" interface="com.neusoft.sl.si.settle.dubbo.common.service.GetSettleInfoItemService" check="false"></dubbo:reference>-->
+
+
+    <!-- 东软  学校登记模块 -->
+    <!--<dubbo:reference id="schoolManage" interface="com.neusoft.sl.si.basicinfo.dubbo.employee.school.service.SchoolManageDubboService" check="false"></dubbo:reference>-->
+
+
+
+
+    <!-- 东软  个人补退处理 -->
+    <!--<dubbo:reference id="perFeeReturn" interface="com.neusoft.sl.si.collection.dubbo.employee.feeadjust.perfeereturn.service.PerFeeReturnDubboService" check="false"></dubbo:reference>-->
+
+
+
+
+    <!-- 东软 单位信息维护   -->
+   <!--  <dubbo:reference id="unitDubboService" interface="com.neusoft.sl.si.basicinfo.dubbo.employee.unit.service.UnitDubboService" check="false"></dubbo:reference> -->
+
+
+
+
+
+
+    <!--  <dubbo:reference id="unitDubboService" interface="com.neusoft.sl.si.basicinfo.dubbo.employee.unit.service.UnitDubboService" check="false"></dubbo:reference> -->
+
+    <!-- 东软 医疗视同缴费月数维护功能模块 -->
+    <dubbo:reference id="regardFeeMedicare" interface="com.neusoft.sl.si.collection.dubbo.employee.feeadjust.regardfeemedicare.service.RegardFeeMedicareDubboService" check="false"></dubbo:reference>
+
+    <!-- 东软 个人欠费信息查询 -->
+    <dubbo:reference id="queryPerArrearInfo" interface="com.neusoft.sl.si.collection.dubbo.employee.feeadjust.perarrearcancel.service.QueryPerArrearInfoDubboService" check="false"></dubbo:reference>
+
+    <!-- 东软 单位欠费补缴 -->
+    <dubbo:reference id="unitArrear" interface="com.neusoft.sl.si.collection.dubbo.employee.feeadjust.unitarrearpay.service.UnitArrearPayDubboService" check="false"></dubbo:reference>
+
+    <!-- 东软 人员信息维护 -->
+    <dubbo:reference id="personManage" interface="com.neusoft.sl.si.basicinfo.dubbo.employee.person.service.PersonManageDubboService" check="false"></dubbo:reference>
+
+    <!-- 东软 养老历史缴费补缴（清远） -->
+    <dubbo:reference id="perArr" interface="com.neusoft.sl.si.collection.dubbo.employee.feeadjust.perarrearpay.service.PerArrearPayDubboService" check="false"></dubbo:reference>
+
+    <!-- 东软 单位欠款核销 -->
+    <dubbo:reference id="unitArrearInfos" interface="com.neusoft.sl.si.collection.dubbo.employee.feeadjust.unitarrearcancel.service.UnitArrearInfoDubboService" check="false"></dubbo:reference>
+
+
+
+    <!-- 东软 差额补退处理模块 -->
+    <dubbo:reference id="perFeeAdjustss" interface="com.neusoft.sl.si.collection.dubbo.employee.feeadjust.perfeeadjust.service.PerFeeAdjustDubboService" group="jf" check="false"></dubbo:reference>
+
+
+    <!-- 创智  获取疾病信息-->
+    <!--<dubbo:reference id="enHospital" interface="com.powersi.dubbo.entity.inter.EnHospital"  check="false" />-->
+    <!-- 创智  获取人员基金状态-->
+    <dubbo:reference id="enperson" interface="com.powersi.dubbo.entity.inter.Enperson"  check="false" />
+    <!-- 创智  个人就诊信息保存、 修改就诊信息 -->
+    <dubbo:reference id="reimDeclareInterface" interface="com.powersi.dubbo.medicare.inter.ReimDeclareInterface"  check="false" />
+    <!-- 创智  参保人拨付账户信息审核 -->
+    <dubbo:reference id="medicalAuditInterface" interface="com.powersi.dubbo.medicare.auditFee.MedicalAuditInterface"  check="false" />
+
+
+	<!-- 创智  参保人拨付账户信息审核（生育） -->
+   	<dubbo:reference id="reimDeclareSyInterface" interface="com.powersi.dubbo.medicare.inter.ReimDeclareSYInterface"  check="false" />
+    <!-- 创智  参保人拨付账户信息审核（工伤） -->
+    <dubbo:reference id="reimDeclareGsInterface" interface="com.powersi.dubbo.medicare.inter.ReimDeclareGSInterface"  check="false" />
+
+
+
+
+
+   <!-- 创智 获取码值信息 -->
+   <dubbo:reference id="trans"  interface="com.powersi.dubbo.common.TranscodingValueInterface"  check="false" />
+    
+
+    
+
+
+
+
+    <!-- 创智  转诊转院管理-->
+    <dubbo:reference id="changeHospitalInterface" interface="com.powersi.dubbo.medicare.medicareSpecial.toFangDi.ChangeHospitalInterface"  check="false" />
+    
+    <!-- 创智  转诊-->
+    <dubbo:reference id="designated" interface="com.powersi.dubbo.medicare.medicareSpecial.toFangDi.DesignatedHospitalRecordAddInterface"  check="false" />
+    
+    <!-- 创智  转诊-->
+    <dubbo:reference id="hospitalQueryInterface" interface="com.powersi.dubbo.medicare.medicareSpecial.toFangDi.HospitalQueryInterface"  check="false" />
+    
+    <!-- 创智  异地管理-->
+    <dubbo:reference id="outLandInterface" interface="com.powersi.dubbo.medicare.medicareSpecial.toFangDi.OutLandInterface"  check="false" />
+    
+    
+    <!-- 创智  转诊-->
+    <dubbo:reference id="patientSelected" interface="com.powersi.dubbo.medicare.medicareSpecial.toFangDi.PatientSelectedHospitalInterface"  check="false" />
+    
+    
+    <!-- 创智  1.2.10二次返院管理-->
+    <dubbo:reference id="secondReturn" interface="com.powersi.dubbo.medicare.medicareSpecial.toFangDi.SecondReturnHospitalInterface"  check="false" />
+    
+    <!-- 创智  -->
+    <dubbo:reference id="specialAnd" interface="com.powersi.dubbo.medicare.medicareSpecial.toFangDi.SpecialAndChronicDiseaseInterface"  check="false" />
+    
+    <!-- 创智  转诊-->
+    <dubbo:reference id="specialAndChronic" interface="com.powersi.dubbo.medicare.medicareSpecial.toFangDi.SpecialAndChronicInterface"  check="false" />
+
+    <!-- 创智  生育信息登记-->
+    <dubbo:reference id="maternity" interface="com.powersi.dubbo.injury.outInter_fangdi.MaternityRegService_fd"  check="false" />
+    
+    
+    <!-- 创智 生育待遇资格认定，资格认证-->
+    <dubbo:reference id="treatmentApprobate" interface="com.powersi.dubbo.injury.outInter_fangdi.TreatmentApprobateService_fd"  check="false" />
+
+    <!-- 创智  二次返院 -->
+    <!--<dubbo:reference id="secondReturnHospitalInterface" interface="com.powersi.dubbo.medicare.medicareSpecial.toFangDi.SecondReturnHospitalInterface"  check="false" />-->
+
+     <!-- 创智 遗属待遇核定-->
+    <dubbo:reference id="relationApproved" interface="com.powersi.dubbo.injury.outInter_fangdi.RelationApprovedServicr_fd"  check="false" />
+
+
+
+     <!-- 创智 工伤信息修改-->
+    <dubbo:reference id="injuryInfoEdit" interface="com.powersi.dubbo.injury.outInter_fangdi.InjuryInfoEditService_fd"  check="false" />
+    
+     <!-- 创智 工伤信息修改-->
+    <dubbo:reference id="injuryDeathRegist" interface="com.powersi.dubbo.injury.outInter_fangdi.InjuryDeathRegistService_fd"  check="false" />
+
+     <!-- 创智 专家鉴定结论代录-->
+    <dubbo:reference id="cityLabourEvalManage" interface="com.powersi.dubbo.injury.outInter_fangdi.CityLabourEvalManageService_fd"  check="false" />
+
+   
+   	<!--创智 1.6.1工伤预防费用录入 -->
+   <dubbo:reference id="preventionService" interface="com.powersi.dubbo.injury.outInter_fangdi.PreventionService_fd"  check="false" />
+   
+    <!-- 网新 档案管理 -->
+    <dubbo:reference id="personnelArchives" interface="com.insigma.dubbo.api.PersonnelArchiveService" check="false"/>
+    
+</beans>

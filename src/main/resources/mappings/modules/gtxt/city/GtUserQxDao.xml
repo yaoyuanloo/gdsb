@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fortunes.javamg.modules.gtxt.city.dao.GtUserQxDao">
+    
+	<sql id="gtUserQxColumns">
+		a.id AS "id",
+		a.qxid AS "qxid",
+		a.userid AS "userid"
+	</sql>
+	
+	<sql id="gtUserQxJoins">
+	</sql>
+	<!--根据用户ID查找用户权限-->
+	<select id="getUserIdByQxId" resultType="GtUserQx">
+		SELECT
+		<include refid="gtUserQxColumns"/>
+		FROM gt_user_qx a
+		<include refid="gtUserQxJoins"/>
+		WHERE a.userid = #{userid}
+	</select>
+
+	<select id="get" resultType="GtUserQx">
+		SELECT 
+			<include refid="gtUserQxColumns"/>
+		FROM gt_user_qx a
+		<include refid="gtUserQxJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GtUserQx">
+		SELECT 
+			<include refid="gtUserQxColumns"/>
+		FROM gt_user_qx a
+		<include refid="gtUserQxJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GtUserQx">
+		SELECT 
+			<include refid="gtUserQxColumns"/>
+		FROM gt_user_qx a
+		<include refid="gtUserQxJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gt_user_qx(
+			id,
+			qxid,
+			userid
+		) VALUES (
+			#{id},
+			#{qxid},
+			#{userid}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gt_user_qx SET 	
+			qxid = #{qxid},
+			userid = #{userid}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM gt_user_qx
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fortunes.javamg.modules.gtxt.city.dao.DYwMaterialDao">
+    
+	<sql id="dYwMaterialColumns">
+		a.yw_id AS "ywId",
+		a.p_mate_id AS "pMateId"
+	</sql>
+	
+	<sql id="dYwMaterialJoins">
+	</sql>
+    
+	<select id="get" resultType="DYwMaterial">
+		SELECT 
+			<include refid="dYwMaterialColumns"/>
+		FROM d_yw_material a
+		<include refid="dYwMaterialJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="queryInfo" resultType="DYwMaterial">
+		SELECT
+			p.name AS "name",
+			p.cate_id AS "cateId"
+		FROM p_materialinfo p
+		INNER JOIN d_yw_material d ON d.p_mate_id=p.id
+		WHERE d.yw_id=#{ywId}
+	</select>
+	
+	<select id="queryGetid" resultType="DYwMaterial">
+		SELECT 
+			<include refid="dYwMaterialColumns"/>
+		FROM d_yw_material a
+		<include refid="dYwMaterialJoins"/>
+		WHERE a.YW_ID = #{ywid}
+	</select>
+	
+	
+	<select id="findList" resultType="DYwMaterial">
+		SELECT 
+			<include refid="dYwMaterialColumns"/>
+		FROM d_yw_material a
+		<include refid="dYwMaterialJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DYwMaterial">
+		SELECT 
+			<include refid="dYwMaterialColumns"/>
+		FROM d_yw_material a
+		<include refid="dYwMaterialJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO d_yw_material(
+			yw_id,
+			p_mate_id
+		) VALUES (
+			#{ywId},
+			#{pMateId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE d_yw_material SET 	
+			yw_id = #{ywId},
+			p_mate_id = #{pMateId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM d_yw_material
+		WHERE id = #{id}
+	</update>
+	
+	
+	<update id="deleteYwid">
+		DELETE FROM d_yw_material WHERE yw_id = #{ywid}
+	</update>
+	
+	
+	
+</mapper>

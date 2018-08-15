@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fortunes.javamg.modules.gtxt.gt.dao.GtEmsinfoDao">
+    
+	<sql id="gtEmsinfoColumns">
+		a.id AS "id",
+		a.ywlsh AS "ywlsh",
+		a.sddz AS "sddz",
+		a.sjr AS "sjr",
+		a.lxfs AS "lxfs",
+		a.bydh AS "bydh",
+		a.create_date AS "createDate",
+		a.by1 AS "by1",
+		a.by2 AS "by2",
+		a.by3 AS "by3",
+		a.state AS "state",
+		a.sdqy AS "sdqy"
+	</sql>
+	
+	<sql id="gtEmsinfoJoins">
+	</sql>
+    
+	<select id="get" resultType="GtEmsinfo">
+		SELECT 
+			<include refid="gtEmsinfoColumns"/>
+		FROM gt_emsinfo a
+		<include refid="gtEmsinfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GtEmsinfo">
+		SELECT 
+			<include refid="gtEmsinfoColumns"/>
+		FROM gt_emsinfo a
+		<include refid="gtEmsinfoJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GtEmsinfo">
+		SELECT 
+			<include refid="gtEmsinfoColumns"/>
+		FROM gt_emsinfo a
+		<include refid="gtEmsinfoJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gt_emsinfo(
+			id,
+			ywlsh,
+			sddz,
+			sjr,
+			lxfs,
+			bydh,
+			create_date,
+			by1,
+			by2,
+			by3,
+			state,
+			sdqy
+		) VALUES (
+			#{id},
+			#{ywlsh},
+			#{sddz},
+			#{sjr},
+			#{lxfs},
+			#{bydh},
+			#{createDate},
+			#{by1},
+			#{by2},
+			#{by3},
+			#{state},
+			#{sdqy}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gt_emsinfo SET 	
+			ywlsh = #{ywlsh},
+			sddz = #{sddz},
+			sjr = #{sjr},
+			lxfs = #{lxfs},
+			bydh = #{bydh},
+			by1 = #{by1},
+			by2 = #{by2},
+			by3 = #{by3},
+			state = #{state},
+			sdqy = #{sdqy}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM gt_emsinfo
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

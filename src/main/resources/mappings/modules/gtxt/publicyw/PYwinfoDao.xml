@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fortunes.javamg.modules.gtxt.publicyw.dao.PYwinfoDao">
+    
+	<sql id="pYwinfoColumns">
+		a.id AS "id",
+		a.cate_id AS "pywCate.id",
+		a.name AS "name",
+		a.code AS "code",
+		a.conment AS "conment",
+		a.create_by AS "createBy.id",
+		a.state AS "state",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.acceptaddress AS "acceptaddress",
+		a.examineaddress AS "examineaddress",
+		a.trialaddress AS "trialaddress",
+		a.reviewaddress AS "reviewaddress",
+		a.approveaddress AS "approveaddress"
+	</sql>
+	
+	<sql id="pYwinfoJoins">
+	</sql>
+	<select id="findYwinfoListBydiYwId" parameterType="String" resultType="PYwinfo">
+		SELECT
+		<include refid="pYwinfoColumns"/>
+		FROM p_ywinfo A
+		 INNER JOIN D_YWINFO B  on A.id=b.yw_id  where b.id=#{dywId}
+	</select>
+	<select id="get" resultType="PYwinfo">
+		SELECT 
+			<include refid="pYwinfoColumns"/>
+		FROM p_ywinfo a
+		<include refid="pYwinfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="PYwinfo">
+		SELECT 
+			<include refid="pYwinfoColumns"/>
+		FROM p_ywinfo a
+		<include refid="pYwinfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="pywCate != null and pywCate != '' and pywCate.id != null and pywCate.id != '' ">
+				AND a.cate_id =#{pywCate.id}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PYwinfo">
+		SELECT 
+			<include refid="pYwinfoColumns"/>
+		FROM p_ywinfo a
+		<include refid="pYwinfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO p_ywinfo(
+			id,
+			cate_id,
+			name,
+			code,
+			conment,
+			create_by,
+			state,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			acceptaddress,
+			examineaddress,
+			trialaddress,
+			reviewaddress,
+			approveaddress
+		) VALUES (
+			#{id},
+			#{pywCate.id},
+			#{name},
+			#{code},
+			#{conment},
+			#{createBy.id},
+			#{state},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{acceptaddress},
+			#{examineaddress},
+			#{trialaddress},
+			#{reviewaddress},
+			#{approveaddress}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE p_ywinfo SET 	
+			cate_id = #{pywCate.id},
+			name = #{name},
+			code = #{code},
+			conment = #{conment},
+			state = #{state},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			acceptaddress = #{acceptaddress},
+			examineaddress = #{examineaddress},
+			trialaddress = #{trialaddress},
+			reviewaddress = #{reviewaddress},
+			approveaddress = #{approveaddress}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE p_ywinfo SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
